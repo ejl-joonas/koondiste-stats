@@ -1,0 +1,159 @@
+# Step-by-Step Approach for Building the Koondiste-Stats Python Engine
+
+**Created: 2025-04-28 10:56:41 UTC**  
+**Author: ejl-joonas**
+
+## Planning Phase (2025-04-28 through 2025-05-19)
+
+### Step 1: Data Understanding & Schema Design (1 week)
+1. **Analyze Dartfish CSV Structure**
+   - Examine column headers, data types, and formats
+   - Identify timestamp formats and how events are recorded
+   - Document any irregularities or special characters
+
+2. **Map Data to Analysis Requirements**
+   - Create mapping document connecting raw data fields to desired metrics
+   - Identify any data gaps requiring additional calculation or inference
+   - Note which fields correspond to your defined taxonomy (pressing zones, progression types, etc.)
+
+3. **Define Output Schema**
+   - Determine structure for storing processed results
+   - Plan hierarchical organization (match level → period level → 5-minute intervals → events)
+   - Design schema to support both team and individual player analysis
+
+### Step 2: Core Architecture Planning (1 week)
+1. **Module Structure**
+   - Plan separation of concerns (data loading, processing, analysis, export)
+   - Define interfaces between components
+   - Establish error handling and logging strategy
+
+2. **Data Processing Flow**
+   - Design sequential pipeline for transforming raw data to insights
+   - Plan for batch vs. streaming processing
+   - Consider caching strategies for performance optimization
+
+3. **Configuration Management**
+   - Plan how to handle configurable parameters (zone definitions, momentum point values)
+   - Design for easy updates to scoring models without code changes
+   - Consider internationalization needs (Estonian/English terminology)
+
+### Step 3: Algorithm Development Planning (1-2 weeks)
+1. **Momentum Calculation Approach**
+   - Plan implementation of your 5-minute interval momentum scoring system
+   - Design methods to aggregate and normalize values
+   - Consider visualization requirements when designing data structures
+
+2. **Pressing Analysis Methods**
+   - Design algorithms for classifying events into pressing zones
+   - Plan for calculating pressing effectiveness metrics
+   - Develop approach for transition moment identification
+
+3. **Set-Piece & Progression Analysis**
+   - Design algorithms for identifying and categorizing set-pieces
+   - Plan approach for S1/S2/S3 progression classification
+   - Develop methods for calculating efficiency metrics
+
+### Step 4: Technical Requirements & Dependencies (3-4 days)
+1. **Library Selection**
+   - Identify required Python libraries:
+     - pandas/numpy for data manipulation
+     - matplotlib/seaborn/plotly for visualizations
+     - scikit-learn for any advanced statistical analysis
+   
+2. **Environment Planning**
+   - Determine Python version requirements
+   - Plan dependency management approach (requirements.txt, poetry, etc.)
+   - Consider containerization options for deployment
+
+3. **Performance Considerations**
+   - Estimate dataset sizes and computational requirements
+   - Identify potential bottlenecks
+   - Plan optimization strategies for large datasets
+
+## Implementation Roadmap
+
+### Step 5: Core Data Processing Implementation
+1. **Data Loading Module**
+   - Create flexible CSV parsers that handle Dartfish format variations
+   - Implement data validation and cleaning functions
+   - Develop error handling for corrupt or incomplete files
+
+2. **Event Classification System**
+   - Build classifiers for match events based on your taxonomy
+   - Implement zone detection algorithms
+   - Create functions to identify phases of play
+
+3. **Basic Metric Calculation**
+   - Implement foundational statistics calculation
+   - Create aggregation functions for team-level metrics
+   - Develop time-based windowing for period and interval analysis
+
+### Step 6: Advanced Analytics Implementation
+1. **Momentum Engine**
+   - Implement the scoring system for match actions
+   - Create momentum aggregation across time intervals
+   - Develop momentum shift detection algorithms
+
+2. **Individual Player Analysis**
+   - Build position-specific rating calculators
+   - Implement player contribution metrics
+   - Create comparative analysis functions
+
+3. **Expected Goals & Advanced Metrics**
+   - Implement or integrate xG and xGOT calculations
+   - Create expected threat models
+   - Develop efficiency rating systems
+
+### Step 7: Output Generation
+1. **Data Export Module**
+   - Create structured outputs for feeding to UI
+   - Implement serialization for different formats (JSON, CSV, etc.)
+   - Build reporting templates for standard analyses
+
+2. **Visualization Generation**
+   - Develop functions to generate standard charts and visualizations
+   - Implement heat map generation for spatial analysis
+   - Create player rating visualizations
+
+3. **API Layer**
+   - Design clean API interfaces for UI integration
+   - Implement caching for performance
+   - Create documentation for all public functions
+
+### Step 8: Testing & Validation
+1. **Test Plan Development**
+   - Create unit tests for core algorithms
+   - Design integration tests for end-to-end validation
+   - Develop specific test cases based on known match scenarios
+
+2. **Validation Framework**
+   - Create methods to validate outputs against expert interpretation
+   - Implement sensitivity analysis for scoring parameters
+   - Develop performance benchmarks
+
+3. **Documentation**
+   - Create comprehensive docstrings and API documentation
+   - Develop maintenance guide for future developers
+   - Create technical specifications document
+
+## Key Technical Considerations
+
+1. **Performance Optimization**
+   - Plan for vectorized operations instead of loops where possible
+   - Consider lazy evaluation for expensive calculations
+   - Implement appropriate indexing for fast lookup
+
+2. **Extensibility**
+   - Design plugin architecture for new metrics
+   - Create abstract base classes for core components
+   - Use dependency injection for flexible configuration
+
+3. **Error Handling & Logging**
+   - Implement robust error handling for corrupted input data
+   - Create detailed logging for troubleshooting
+   - Design graceful degradation when data is incomplete
+
+4. **Integration Points**
+   - Plan clear interfaces for Eyeball data integration
+   - Design hooks for future data sources
+   - Create well-defined API contracts for UI consumption

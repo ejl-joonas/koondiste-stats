@@ -1,0 +1,128 @@
+# Dartfish CSV Structure Analysis
+
+**Date**: 2025-04-28 11:42:44 UTC  
+**Author**: ejl-joonas
+
+## Original Request
+
+1. **Analyze Dartfish CSV Structure**
+   - Examine column headers, data types, and formats
+   - Identify timestamp formats and how events are recorded
+   - Document any irregularities or special characters
+
+## CSV Files Analyzed
+
+- `2025.04.14 U17 Eesti - Gruusia (1pa).csv` - First half data
+- `2025.04.14 U17 Eesti - Gruusia (2pa).csv` - Second half data
+
+## Analysis Results
+
+### Column Headers, Data Types, and Formats
+
+| Column Name | Data Type | Format | Description |
+|-------------|-----------|--------|-------------|
+| Name | String | Text pattern | Combined event identifier with multiple attributes |
+| Position | Integer | Milliseconds | Timestamp when event started |
+| Duration | Integer | Milliseconds | Length of the event |
+| Poolaeg | String | Number with period (e.g., "1.") | Half indicator |
+| Põhimoment | String | 2-character code | Team possession indicator |
+| Tsoon1 | String | 1-2 character code | Primary zone identifier |
+| Tsoon2 | String | 1-2 character code | Secondary zone identifier |
+| Tsoon3 | String | 1-2 character code | Tertiary zone identifier |
+| Opening | String | Text code | Play initiation type |
+| Pressing | String | Text code | Pressing intensity |
+| Outcome | String | 3-character code | Success indicator (POS/NEG) |
+| Result | String | Text code | Event outcome |
+| Shot2 | String | Text code | Additional shot information |
+| Standard last/4 | String | Text code | Set piece information |
+| Field Position | String | Alphanumeric code | Location on field |
+
+### Timestamp Formats and Event Recording
+
+Events are tracked using two time-related columns:
+1. **Position**: Represents the starting time of an event in milliseconds from the beginning of each half
+2. **Duration**: Represents how long the event lasted in milliseconds
+
+Time format peculiarities:
+- Clock starts at 0 for each half
+- Times are recorded in milliseconds (not in traditional match clock format)
+- First half runs approximately 2,711,952 ms (~45 minutes)
+- Second half runs approximately 2,783,152 ms (~46 minutes)
+- No explicit stoppage time marking
+
+### Event Recording Pattern:
+
+Events are recorded sequentially with the following pattern:
+1. An event begins (Position)
+2. It continues for a certain duration (Duration)
+3. Next event begins either immediately after or with some overlap
+
+### Data Irregularities and Special Characters:
+
+1. **BOM Character**: The first column header begins with a BOM (Byte Order Mark) character (invisible but present)
+
+2. **Naming Inconsistencies**:
+   - Some columns use Estonian terms (Poolaeg, Põhimoment)
+   - Other columns use English terms or codes
+
+3. **Empty Fields**: Several rows contain empty cells in certain columns, particularly:
+   - Tsoon1, Tsoon2, Tsoon3 often left empty when not applicable
+   - Shot2 mostly empty except for shooting events
+   - Field Position sometimes missing
+
+4. **Code System**: The data uses a complex coding system that requires interpretation:
+   - Team codes: AA, DD, AD, DA
+   - Zone codes: S1, S2, S3
+   - Result codes: KEEPPOS, WINOPENSTAN, ENTRY, SHOTOFF, etc.
+
+5. **Semicolon Delimiter**: The CSV uses semicolons (;) as delimiters rather than commas
+
+## Code Descriptions
+
+### Team Possession Codes (Põhimoment)
+- **AA**: Estonia attacking
+- **DD**: Georgia attacking
+- **AD**: Transition from Estonia to Georgia
+- **DA**: Transition from Georgia to Estonia
+
+### Zone Codes
+- **S1, S2, S3**: Different sectors of the pitch
+
+### Opening Types
+- **THROWIN_OPEN**: Throw-in
+- **FK_OPEN**: Free kick
+- **GK_OPENSHORT**: Short goal kick
+- **STAN_CORNER**: Corner kick
+- **STAN_KICKOFF**: Kickoff
+- **STAN_FK**: Free kick
+
+### Pressing Types
+- **HIGHPRESS**: High intensity pressing
+- **MIDPRESS**: Medium intensity pressing
+- **LOWPRESS**: Low intensity pressing
+
+### Outcomes
+- **POS**: Positive outcome
+- **NEG**: Negative outcome
+
+### Results
+- **KEEPPOS**: Maintained possession
+- **WINOPENSTAN**: Won open standard
+- **ENTRY**: Entry into attacking area
+- **SHOTOFF**: Shot off target
+- **SHOTGOAL**: Goal scored
+- **SHOTBLOCK**: Shot blocked
+- **SHOTON**: Shot on target
+
+### Field Position Format
+- Format: `[Side][Zone]/[Subzone]`
+- Examples: M3, L2/1, R2/2
+- Side indicators: L (Left), M (Middle), R (Right)
+- Depth indicators: 1, 2, 3 (likely defensive to offensive)
+- Sub-zones: /1, /2 (possibly inner/outer)
+
+## Analysis Conclusions
+
+This Dartfish CSV data provides a comprehensive event-by-event breakdown of the U17 football match between Estonia and Georgia. The data structure allows for detailed analysis of possession patterns, pressing intensity, shot outcomes, and spatial distribution of events.
+
+The specialized coding system requires familiarity with the specific terminology and conventions used in the Dartfish tagging system for football analysis.

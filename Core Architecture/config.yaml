@@ -1,0 +1,30 @@
+# config.yaml
+cache_settings:
+  enabled: true
+  storage: "disk"
+  path: "./cache"
+  expiration: 86400  # 24 hours
+
+momentum_settings:
+  interval_minutes: 5
+  goal_points: 20
+  shot_points:
+    on_target: 4
+    off_target: 2
+  turnover_points:
+    high_press: 3
+    mid_press: 2
+    low_press: 1
+
+pressing_settings:
+  zones:
+    high:
+      start_y: 0.7
+      end_y: 1.0
+    mid:
+      start_y: 0.3
+      end_y: 0.7
+    low:
+      start_y: 0.0
+      end_y: 0.3
+  success_threshold: 3  # seconds to successful ball recovery

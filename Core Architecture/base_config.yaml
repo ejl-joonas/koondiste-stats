@@ -1,0 +1,105 @@
+# base_config.yaml
+analysis:
+  # Core analysis parameters
+  intervals:
+    minutes: 5  # 5-minute intervals for momentum analysis
+  
+  # Scoring parameters
+  momentum:
+    point_values:
+      # Offensive actions
+      SHOTGOAL: 20.0  # Goal
+      SHOTON: 4.0     # Shot on target
+      SHOTBLOCK: 3.0  # Blocked shot 
+      SHOTOFF: 2.0    # Shot off target
+      ENTRY: 1.0      # Entry to final third
+      
+      # Pressing actions by zone
+      HIGHPRESS_WIN: 3.0
+      MIDPRESS_WIN: 2.0
+      LOWPRESS_WIN: 1.0
+      
+      # Negative values for opposition
+      OPP_SHOTGOAL: -20.0
+      OPP_SHOTON: -4.0
+      # ...etc
+    
+    decay:
+      factor: 0.2     # Decay factor for momentum over time
+      window: 2       # Number of intervals for decay calculation
+  
+  # Zones definition
+  zones:
+    pressing:
+      HIGH:
+        start_y: 70  # Percentage of pitch length
+        end_y: 100
+      MID:
+        start_y: 30
+        end_y: 70
+      LOW:
+        start_y: 0
+        end_y: 30
+    
+    progression:
+      S1:
+        description: "Defensive third"
+        start_y: 0
+        end_y: 33
+      S2:
+        description: "Middle third"
+        start_y: 33
+        end_y: 67
+      S3:
+        description: "Attacking third"
+        start_y: 67
+        end_y: 100
+
+# Taxonomies and code mappings
+taxonomies:
+  possession:
+    AA: 
+      code: "AA"
+      en: "Estonia attacking"
+      et: "Eesti rünnak"
+    DD:
+      code: "DD" 
+      en: "Opposition attacking"
+      et: "Vastase rünnak"
+    AD:
+      code: "AD"
+      en: "Transition: Estonia to opposition"
+      et: "Üleminek: Eesti → vastane"
+    DA:
+      code: "DA"
+      en: "Transition: Opposition to Estonia"
+      et: "Üleminek: Vastane → Eesti"
+      
+  outcomes:
+    POS:
+      code: "POS"
+      en: "Positive"
+      et: "Positiivne"
+    NEG: 
+      code: "NEG"
+      en: "Negative"
+      et: "Negatiivne"
+      
+  # ...other taxonomies
+      
+# Display settings
+display:
+  language: "en"  # Default language (en or et)
+  decimal_places: 2
+  charts:
+    momentum:
+      color_positive: "#0693e3"
+      color_negative: "#eb144c"
+      highlight_threshold: 5.0
+
+# Data processing settings  
+processing:
+  cache:
+    enabled: true
+    ttl_seconds: 3600  # 1 hour cache lifetime
+    max_entries: 100
